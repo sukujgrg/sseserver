@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>sse</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>UPDATE THIS WITH PATH TO EXECUTABLE</string>
+        <string>UPDATE THIS WITH PORT NUMBER</string>
+    </array>
+    <key>StandardOutPath</key>
+    <string>/tmp/sse.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/sse_err.log</string>
+    <key>Debug</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>
