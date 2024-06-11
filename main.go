@@ -143,9 +143,8 @@ func keepalive(broker *Broker) {
 		for {
 			select {
 			case <-ticker.C:
-				j, _ := json.Marshal(map[string]string{"title": "keepalive", "text": "test"})
+				j, _ := json.Marshal(map[string]string{"title": "keepalive", "text": time.Now().String()})
 				broker.Notifier <- []byte(j)
-				// do something every 5 minutes as define by the ticker above
 			}
 		}
 	}(ticker)
