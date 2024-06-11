@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -94,7 +95,7 @@ func (broker *Broker) Stream(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
 	w.Header().Set("X-Accel-Buffering", "no")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	for {
 		select {
@@ -136,6 +137,20 @@ func (broker *Broker) BroadcastMessage(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Message sent"))
 }
 
+func keepalive(broker *Broker) {
+	ticker := time.NewTicker(1 * time.Minute)
+	go func(ticker *time.Ticker) {
+		for {
+			select {
+			case <-ticker.C:
+				j, _ := json.Marshal(map[string]string{"title": "keepalive", "text": "test"})
+				broker.Notifier <- []byte(j)
+				// do something every 5 minutes as define by the ticker above
+			}
+		}
+	}(ticker)
+}
+
 func main() {
 	broker := NewServer()
 	router := mux.NewRouter()
@@ -144,6 +159,7 @@ func main() {
 
 	router.HandleFunc("/stream", broker.Stream).Methods("GET")
 
+	go keepalive(broker)
 	if err := http.ListenAndServe(":"+os.Args[1], router); err != nil {
 		panic(err)
 	}
