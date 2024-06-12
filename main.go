@@ -155,10 +155,9 @@ func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/messages", broker.BroadcastMessage).Methods("POST")
-
 	router.HandleFunc("/stream", broker.Stream).Methods("GET")
 
-	go keepalive(broker)
+	keepalive(broker)
 	if err := http.ListenAndServe(":"+os.Args[1], router); err != nil {
 		panic(err)
 	}
